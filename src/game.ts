@@ -2,12 +2,16 @@ import { Component, Bounds, Position, Options } from './components.js'
 import { Player, Platform } from './gameObjects.js'
 
 const canvas: HTMLCanvasElement = document.querySelector('#canvas')!
-const context: CanvasRenderingContext2D  = canvas.getContext('2d')!
+const context: CanvasRenderingContext2D = canvas.getContext('2d')!
 
 const Gravity = 2
 
 const player = new Player("Red player")
-const platform = new Platform()
+const platforms = [
+    new Platform(200, 200, 100, 'red'),
+    new Platform(100, 350, 150, 'blue'),
+    new Platform(500, 300, 200, 'deepskyblue')
+]
 
 const options: Options = {
     canvas: {
@@ -32,18 +36,31 @@ function update() {
         player.velocity.y = 0
     }
 
-    if (
-        player.bounds.maxY >= platform.bounds.y &&
-        player.bounds.y <= platform.bounds.y &&
-        player.bounds.maxX >= platform.bounds.x &&
-        player.bounds.x <= platform.bounds.maxX
-          ) {
-        player.bounds.y = platform.bounds.y - player.bounds.height
-        player.velocity.y = 0
-    }
+    platforms.forEach(platform => {
+        if (
+            player.bounds.maxX >= platform.bounds.x &&
+            player.bounds.x <= platform.bounds.maxX
+        ) {
+            if (
+                player.bounds.maxY >= platform.bounds.y &&
+                player.bounds.y <= platform.bounds.y) {
+
+                player.bounds.y = platform.bounds.y - player.bounds.height
+                player.velocity.y = 0
+            }
+
+            if (player.bounds.y >= platform.bounds.y &&
+                player.bounds.y <= platform.bounds.maxY) {
+                    player.bounds.y = platform.bounds.maxY
+                    player.velocity.y = 0
+                }
+        }
+
+    });
+
 
     if (keys.up) {
-        player.velocity.y = -10
+        player.velocity.y = -20
     }
     else {
         player.velocity.y += Gravity
@@ -60,10 +77,12 @@ function update() {
     }
 
     player.update(options)
-    platform.update(options)
-
     player.draw(context)
-    platform.draw(context)
+
+    platforms.forEach(platform => {
+        platform.update(options)
+        platform.draw(context)
+    })
 
     requestAnimationFrame(update)
 }

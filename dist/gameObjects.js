@@ -1,6 +1,7 @@
 import { Bounds } from "./components.js";
 export class Player {
     constructor(name) {
+        this.type = "player";
         this.bounds = new Bounds(0, 0, 50, 50);
         this.velocity = {
             x: 0,
@@ -17,13 +18,15 @@ export class Player {
     }
 }
 export class Platform {
-    constructor() {
+    constructor(x, y, width, color) {
         this.name = "platform";
-        this.bounds = new Bounds(300, 200, 400, 50);
+        this.type = "platform";
         this.update = (options) => { };
+        this.bounds = new Bounds(x, y, width, 50);
+        this.color = color;
     }
     draw(context) {
-        context.fillStyle = 'blue';
+        context.fillStyle = this.color;
         context.fillRect(this.bounds.x, this.bounds.y, this.bounds.width, this.bounds.height);
     }
 }

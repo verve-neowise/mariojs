@@ -46,7 +46,8 @@ export interface Options {
 
 export interface Component {
     name:       string,
-    bounds:      Bounds,
+    type:       string,
+    bounds:     Bounds,
     draw:       (context: CanvasRenderingContext2D) => void,
     update:     (options: Options) => void
 }
