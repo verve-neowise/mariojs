@@ -7,6 +7,14 @@ export class Bounds {
         this.maxX = x + width;
         this.maxY = y + height;
     }
+    set xPosition(value) {
+        this.x = value;
+        this.maxX = value + this.width;
+    }
+    set yPosition(value) {
+        this.y = value;
+        this.maxY = value + this.height;
+    }
     relocate({ x, y }) {
         this.x = x;
         this.y = y;
