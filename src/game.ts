@@ -5,12 +5,13 @@ const canvas: HTMLCanvasElement = document.querySelector('#canvas')!
 const context: CanvasRenderingContext2D = canvas.getContext('2d')!
 
 const Gravity = 2
+const Speed = 10
 
 const player = new Player("Red player")
 const platforms = [
     new Platform(200, 200, 100, 'red'),
     new Platform(100, 350, 150, 'blue'),
-    new Platform(500, 300, 200, 'deepskyblue')
+    new Platform(500, 300, 100, 'deepskyblue')
 ]
 
 const options: Options = {
@@ -36,41 +37,88 @@ function update() {
         player.velocity.y = 0
     }
 
-    platforms.forEach(platform => {
-        if (
-            player.bounds.maxX >= platform.bounds.x &&
-            player.bounds.x <= platform.bounds.maxX
-        ) {
-            if (
-                player.bounds.maxY >= platform.bounds.y &&
-                player.bounds.y <= platform.bounds.y) {
 
+    platforms.forEach(platform => {
+
+        const isBottom = player.bounds.y < platform.bounds.maxY;
+        const isTop = player.bounds.maxY > platform.bounds.y;
+
+        const isLeft = player.bounds.maxX > platform.bounds.x;
+        const isRight = player.bounds.x < platform.bounds.maxX;
+
+        const isInsideXAxis = isLeft && isRight
+        const isInsideYAxis = isTop && isBottom
+
+        const moveLeft = player.velocity.x < 0
+        const moveRight = player.velocity.x > 0
+        const moveUp = player.velocity.y < 0
+        const moveDown = player.velocity.y > 0
+
+        if (isInsideXAxis && isInsideYAxis) {
+            if (moveRight) {
+                player.bounds.x = platform.bounds.x - player.bounds.width
+                player.velocity.x = 0
+            }
+            else if (moveLeft) {
+                player.bounds.x = platform.bounds.maxX
+                player.velocity.x = 0
+            }
+            else if (moveDown) {
                 player.bounds.y = platform.bounds.y - player.bounds.height
                 player.velocity.y = 0
             }
-
-            if (player.bounds.y >= platform.bounds.y &&
-                player.bounds.y <= platform.bounds.maxY) {
-                    player.bounds.y = platform.bounds.maxY
-                    player.velocity.y = 0
-                }
+            else if (moveUp) {
+                player.bounds.y = platform.bounds.maxY
+                player.velocity.y = 0
+            }
         }
 
+        // if (player.bounds.maxX >= platform.bounds.x &&
+        //     player.bounds.x <= platform.bounds.maxX) {
+
+        //     // top collision
+        //     if (player.bounds.maxY >= platform.bounds.y &&
+        //         player.bounds.y <= platform.bounds.y) {
+
+        //         player.bounds.y = platform.bounds.y - player.bounds.height
+        //         player.velocity.y = 0
+        //     }
+
+        //     // bottom collision
+        //     if (player.bounds.y >= platform.bounds.y &&
+        //         player.bounds.y <= platform.bounds.maxY) {
+        //             player.bounds.y = platform.bounds.maxY
+        //             player.velocity.y = 0
+        //     }
+        // }
+        // if (player.bounds.y >= platform.bounds.y && player.bounds.y <= platform.bounds.maxY &&
+        //     player.bounds.maxY >= platform.bounds.y && player.bounds.maxY <= platform.bounds.maxY) {
+            
+        //         if (player.bounds.maxX >= platform.bounds.x && player.bounds.maxX <= platform.bounds.maxX) {
+        //             player.bounds.x = platform.bounds.x - player.bounds.width
+        //             player.velocity.x = 0
+        //         }
+
+        //         if (player.bounds.x <= platform.bounds.maxX && player.bounds.x >= platform.bounds.x) {
+        //             player.bounds.x = platform.bounds.maxX
+        //             player.velocity.x = 0
+        //         }
+        // }
     });
 
 
     if (keys.up) {
-        player.velocity.y = -20
+        player.velocity.y = -(Speed)
     }
     else {
         player.velocity.y += Gravity
     }
 
     if (keys.left) {
-        player.velocity.x = -10
+        player.velocity.x = -Speed
     }
     else if (keys.right) {
-        player.velocity.x = 10
+        player.velocity.x = Speed
     }
     else {
         player.velocity.x = 0

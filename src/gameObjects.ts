@@ -39,7 +39,7 @@ export class Platform implements Component {
     bounds: Bounds 
 
     constructor(x: number, y: number, width: number, color: string) {
-        this.bounds = new Bounds(x, y, width, 50)
+        this.bounds = new Bounds(x, y, width, 150)
         this.color = color
     }
 
