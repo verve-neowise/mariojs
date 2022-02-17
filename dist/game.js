@@ -18,39 +18,22 @@ requestAnimationFrame(update);
 const player = new Player(0, 0, 50, 50);
 const platform = new Platform(300, 200, 200, 50, 'blue');
 function update() {
-    const insideXAxis = player.x > platform.x && player.maxX < platform.maxX || player.maxX > platform.x && player.x < platform.maxX;
-    const insideYAxis = player.y > platform.y && player.maxY < platform.maxY || player.maxY > platform.y && player.y < platform.maxY;
+    // const insideXAxis = player.x > platform.x && player.maxX < platform.maxX || player.maxX > platform.x && player.x < platform.maxX
+    // const insideYAxis = player.y > platform.y && player.maxY < platform.maxY || player.maxY > platform.y && player.y < platform.maxY
     if (keys.left) {
-        player.velocity.x = -5;
-        if (insideYAxis && player.x + player.velocity.x < platform.maxX && player.x > platform.x) {
-            // left
-            player.velocity.x = 0;
-            player.x = platform.maxX;
-        }
+        moveLeft();
     }
     else if (keys.right) {
-        player.velocity.x = 5;
-        if (insideYAxis && player.maxX + player.velocity.x > platform.x && player.maxX < platform.maxX) {
-            player.velocity.x = 0;
-            player.x = platform.x - player.width;
-        }
+        moveRight();
     }
     else {
         player.velocity.x = 0;
     }
     if (keys.up) {
-        player.velocity.y = -5;
-        if (insideXAxis && player.y + player.velocity.y < platform.maxY && player.y > platform.y) {
-            player.velocity.y = 0;
-            player.y = platform.maxY;
-        }
+        moveUp();
     }
     else if (keys.down) {
-        player.velocity.y = 5;
-        if (insideXAxis && player.maxY + player.velocity.y > platform.y && player.maxY < platform.maxY) {
-            player.velocity.y = 0;
-            player.y = platform.y - player.height;
-        }
+        moveDown();
     }
     else {
         player.velocity.y = 0;
@@ -62,20 +45,51 @@ function update() {
     platform.draw(options);
     requestAnimationFrame(update);
 }
-function checkLeftCollision(player, second) {
-    const insideYAxis = player.y > second.y && player.maxY < second.maxY || player.maxY > second.y && player.y < second.maxY;
-    return false;
-}
-function isInsideXAxis(player, target) {
-    return player.y > target.y && player.maxY < target.maxY || player.maxY > target.y && player.y < target.maxY;
-}
-function moveUp() {
-}
-function moveDown() {
+function moveLeft() {
+    player.velocity.x = -5;
+    if (isInsideYAxis(platform) && checkLeftCollision(platform)) {
+        player.velocity.x = 0;
+        player.x = platform.maxX;
+    }
 }
 function moveRight() {
+    player.velocity.x = 5;
+    if (isInsideYAxis(platform) && checkRightCollision(platform)) {
+        player.velocity.x = 0;
+        player.x = platform.x - player.width;
+    }
 }
-function moveLeft() {
+function moveUp() {
+    player.velocity.y = -5;
+    if (isInsideXAxis(platform) && checkTopCollision(platform)) {
+        player.velocity.y = 0;
+        player.y = platform.maxY;
+    }
+}
+function moveDown() {
+    player.velocity.y = 5;
+    if (isInsideXAxis(platform) && checkBottomCollision(platform)) {
+        player.velocity.y = 0;
+        player.y = platform.y - player.height;
+    }
+}
+function checkLeftCollision(target) {
+    return player.x + player.velocity.x < target.maxX && player.x > target.x;
+}
+function checkRightCollision(target) {
+    return player.maxX + player.velocity.x > target.x && player.maxX < target.maxX;
+}
+function checkTopCollision(target) {
+    return player.y + player.velocity.y < target.maxY && player.y > target.y;
+}
+function checkBottomCollision(target) {
+    return player.maxY + player.velocity.y > target.y && player.maxY < target.maxY;
+}
+function isInsideYAxis(target) {
+    return player.y > target.y && player.maxY < target.maxY || player.maxY > target.y && player.y < target.maxY;
+}
+function isInsideXAxis(target) {
+    return player.x > target.x && player.maxX < target.maxX || player.maxX > target.x && player.x < platform.maxX;
 }
 function keydown(code) {
     keychange(code, true);
