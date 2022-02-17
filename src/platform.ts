@@ -2,7 +2,7 @@ import Component from "./component";
 import Object from "./object";
 import { Options } from "./options";
 
-class Platform extends Object implements Component {
+export default class Platform extends Object implements Component {
 
     private color: string
 
