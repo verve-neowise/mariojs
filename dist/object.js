@@ -1,5 +1,6 @@
 export default class Object {
     constructor() {
+        this.name = "";
         this._x = 0;
         this._y = 0;
         this.maxX = 0;

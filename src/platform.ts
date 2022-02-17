@@ -9,9 +9,11 @@ export default class Platform extends Object implements Component {
     constructor(x: number, y: number, width: number, height: number, color: string) {
         super()
 
+        this.name = color
+        
         this.width = width
         this.height = height
-        
+
         this.x = x
         this.y = y
         this.color = color

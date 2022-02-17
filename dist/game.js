@@ -2,33 +2,33 @@ import Player from "./player.js";
 import Platform from "./platform.js";
 const canvas = document.querySelector('#canvas');
 const context = canvas.getContext('2d');
-const gravity = 5;
-const jumpLimit = 7;
-let canJump = false;
-let inertia = jumpLimit;
 document.onkeydown = (event) => keydown(event.code);
-document.addEventListener('keypress', (event) => {
-    keypressed(event.code);
-});
 document.onkeyup = (event) => keyup(event.code);
+document.onkeypress = (event) => keypressed(event.code);
+/**Debug */
+const lines = [];
+const lines2 = [];
+const GRAVITY = 3;
+const JUMP_LIMIT = 7;
+let inertia = JUMP_LIMIT;
+let canJump = false;
 const options = {
     canvas: canvas,
     context: context
 };
-const keys = {
-    left: false,
-    right: false,
-    up: false,
-    down: false
-};
+const keys = { left: false, right: false, up: false, down: false };
 requestAnimationFrame(update);
-const player = new Player(0, 0, 50, 50);
+const player = new Player(0, 0, 60, 60);
 const platforms = [
-    new Platform(100, 100, 300, 50, 'black'),
-    new Platform(500, 250, 100, 50, 'orange'),
-    new Platform(300, 410, 200, 50, 'blue'),
+    new Platform(100, 150, 300, 50, 'black'),
+    // new Platform(500, 250, 100, 50, 'orange'),
+    // new Platform(300, 410, 200, 50, 'blue'),
+    new Platform(500, 320, 200, 50, 'pink'),
+    new Platform(300, 610, 200, 50, 'deepskyblue'),
+    new Platform(100, 360, 200, 50, 'orange'),
 ];
 function update() {
+    movePlatforms();
     canJump = false;
     if (keys.left) {
         moveLeft();
@@ -48,9 +48,26 @@ function update() {
     player.updatePositions();
     context.fillStyle = 'white';
     context.fillRect(0, 0, canvas.width, canvas.height);
+    /**Debug */
+    lines.forEach(line => {
+        context.strokeStyle = 'green';
+        context.beginPath();
+        context.moveTo(0, line);
+        context.lineTo(canvas.width, line);
+        context.stroke();
+    });
+    lines2.forEach(line => {
+        context.strokeStyle = 'crimson';
+        context.beginPath();
+        context.moveTo(0, line);
+        context.lineTo(canvas.width, line);
+        context.stroke();
+    });
     player.draw(options);
     platforms.forEach(platform => platform.draw(options));
     requestAnimationFrame(update);
+}
+function movePlatforms() {
 }
 function moveLeft() {
     player.velocity.x = -5;
@@ -72,30 +89,32 @@ function moveRight() {
 }
 function moveUp() {
     player.velocity.y -= inertia;
-    platforms.forEach(platform => {
-        if (isInsideXAxis(platform) && checkTopCollision(platform)) {
-            player.velocity.y = 0;
-            player.y = platform.maxY;
-        }
-    });
     inertia--;
     if (inertia == 0) {
-        inertia = jumpLimit;
+        inertia = JUMP_LIMIT;
         keys.up = false;
     }
-}
-function jump() {
-    keys.up = true;
-    inertia = jumpLimit;
+    platforms.forEach(platform => {
+        if (isInsideXAxis(platform) && checkTopCollision(platform)) {
+            /**Debug */
+            lines.push(player.y + player.velocity.y);
+            // lines2.push(player.y + player.velocity.y)
+            player.velocity.y = 0;
+            player.y = platform.maxY;
+            keys.up = false;
+            inertia = JUMP_LIMIT;
+        }
+    });
 }
 function applyGravity() {
-    player.velocity.y += gravity;
+    player.velocity.y += GRAVITY;
     if (checkFloorCollision()) {
         player.velocity.y = 0;
         player.y = canvas.height - player.height;
         canJump = true;
     }
     else {
+        console.log('player-y: ' + player.y);
         platforms.forEach(platform => {
             if (isInsideXAxis(platform) && checkBottomCollision(platform)) {
                 player.velocity.y = 0;
@@ -121,10 +140,20 @@ function checkBottomCollision(target) {
     return player.maxY + player.velocity.y >= target.y && player.maxY < target.maxY;
 }
 function isInsideYAxis(target) {
-    return player.y > target.y && player.maxY < target.maxY || player.maxY > target.y && player.y < target.maxY;
+    if (player.y > target.y && player.maxY < target.maxY || player.maxY > target.y && player.y < target.maxY) {
+        return true;
+    }
+    else {
+        return false;
+    }
 }
 function isInsideXAxis(target) {
-    return player.x > target.x && player.maxX < target.maxX || player.maxX > target.x && player.x < target.maxX;
+    if (player.x > target.x && player.maxX < target.maxX || player.maxX > target.x && player.x < target.maxX) {
+        return true;
+    }
+    else {
+        return false;
+    }
 }
 function keydown(code) {
     keychange(code, true);
@@ -144,9 +173,7 @@ function keychange(code, state) {
     }
 }
 function keypressed(code) {
-    if (code === 'Space') {
-        if (canJump) {
-            jump();
-        }
+    if (code === 'Space' && canJump) {
+        keys.up = true;
     }
 }

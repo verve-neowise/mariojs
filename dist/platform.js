@@ -7,6 +7,7 @@ export default class Platform extends Object {
             options.context.fillRect(this.x, this.y, this.width, this.height);
         };
         this.update = () => { };
+        this.name = color;
         this.width = width;
         this.height = height;
         this.x = x;

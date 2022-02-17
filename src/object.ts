@@ -1,5 +1,7 @@
 export default class Object {
 
+    name: string = ""
+
     private _x: number = 0
     private _y: number = 0
 
@@ -13,7 +15,6 @@ export default class Object {
         this._x = value
         this.maxX = value + this.width
     }
-
     
     get x (): number {
         return this._x
