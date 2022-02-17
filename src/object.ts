@@ -3,8 +3,8 @@ export default class Object {
     private _x: number = 0
     private _y: number = 0
 
-    private maxX: number = 0
-    private maxY: number = 0
+    maxX: number = 0
+    maxY: number = 0
 
     width: number = 0
     height: number = 0
@@ -14,8 +14,17 @@ export default class Object {
         this.maxX = value + this.width
     }
 
+    
+    get x (): number {
+        return this._x
+    }
+
     set y (value: number) {
         this._y = value
         this.maxY = value + this.height
+    }
+
+    get y (): number {
+        return this._y
     }
 }

@@ -1,6 +1,6 @@
-import Component from "./component";
-import Object from "./object";
-import { Options } from "./options";
+import Component from "./component.js";
+import Object from "./object.js";
+import { Options } from "./options.js";
 
 export default class Player extends Object implements Component {
 
@@ -19,11 +19,17 @@ export default class Player extends Object implements Component {
     }
 
     draw = (options: Options) => {
-        options.context.fillStyle = 'blue'
+
+        options.context.fillStyle = 'crimson'
         options.context.fillRect(this.x, this.y, this.width, this.height)
     }
 
     update = () => {
         // todo update logic 
+    }
+
+    updatePositions = () => {
+        this.x += this.velocity.x
+        this.y += this.velocity.y
     }
 }

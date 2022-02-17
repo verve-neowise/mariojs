@@ -11,8 +11,14 @@ export default class Object {
         this._x = value;
         this.maxX = value + this.width;
     }
+    get x() {
+        return this._x;
+    }
     set y(value) {
         this._y = value;
         this.maxY = value + this.height;
+    }
+    get y() {
+        return this._y;
     }
 }

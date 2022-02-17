@@ -1,6 +1,6 @@
-import Component from "./component";
-import Object from "./object";
-import { Options } from "./options";
+import Component from "./component.js";
+import Object from "./object.js";
+import { Options } from "./options.js";
 
 export default class Platform extends Object implements Component {
 
@@ -9,10 +9,11 @@ export default class Platform extends Object implements Component {
     constructor(x: number, y: number, width: number, height: number, color: string) {
         super()
 
-        this.x = x
-        this.y = y
         this.width = width
         this.height = height
+        
+        this.x = x
+        this.y = y
         this.color = color
     }
 
