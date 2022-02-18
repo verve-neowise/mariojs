@@ -1,14 +1,13 @@
 import Object from "./object.js";
 export default class Player extends Object {
-    constructor(x, y, width, height) {
+    constructor(x, y) {
         super();
         this.velocity = {
             x: 0,
             y: 0
         };
         this.draw = (options) => {
-            options.context.fillStyle = 'crimson';
-            options.context.fillRect(this.x, this.y, this.width, this.height);
+            options.context.drawImage(this.image, this.x, this.y, this.width, this.height);
         };
         this.update = () => {
             // todo update logic 
@@ -19,7 +18,9 @@ export default class Player extends Object {
         };
         this.x = x;
         this.y = y;
-        this.width = width;
-        this.height = height;
+        this.width = 44;
+        this.height = 80;
+        this.image = new Image(this.width, this.height);
+        this.image.src = "/mario.png";
     }
 }
