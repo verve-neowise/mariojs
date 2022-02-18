@@ -42,6 +42,10 @@ function update() {
     if (keys.up) {
         moveUp();
     }
+    else if (player.velocity.y < 0) {
+        checkTopCollisionInPlatforms();
+        applyGravity();
+    }
     else {
         applyGravity();
     }
@@ -94,6 +98,9 @@ function moveUp() {
         inertia = JUMP_LIMIT;
         keys.up = false;
     }
+    checkTopCollisionInPlatforms();
+}
+function checkTopCollisionInPlatforms() {
     platforms.forEach(platform => {
         if (isInsideXAxis(platform) && checkTopCollision(platform)) {
             /**Debug */
