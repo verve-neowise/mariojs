@@ -2,7 +2,7 @@ import Player from "./player.js"
 import Platform from "./platform.js"
 import { Options } from "./options.js"
 
-import occurence from "./functions/collision/occurence.js"
+import occurence from "./functions/occurence.js"
 import collisions from "./functions/collision/sideCollisions.js"
 
 const canvas = document.querySelector('#canvas') as HTMLCanvasElement

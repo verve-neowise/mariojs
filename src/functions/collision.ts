@@ -1,4 +1,4 @@
-import Object from "../../components/object"
+import Object from '../components/object'
 
 type Collision = (object: Object, target: Object) => boolean;
 
