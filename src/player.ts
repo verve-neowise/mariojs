@@ -1,6 +1,7 @@
 import Component from "./component.js";
 import Object from "./object.js";
 import { Options } from "./options.js";
+import loadImage from "./functions/loadImage.js";
 
 export default class Player extends Object implements Component {
 
@@ -18,8 +19,7 @@ export default class Player extends Object implements Component {
         this.y = y
         this.width = 44
         this.height = 80
-        this.image = new Image(this.width, this.height)
-        this.image.src = "/mario.png"
+        this.image = loadImage('/mario.png', this.width, this.height)
     }
 
     draw = (options: Options) => {

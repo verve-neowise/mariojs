@@ -30,7 +30,7 @@ const player = new Player(0, 0)
 const platforms = [
     new Platform(100, 150, 300, 50, 'black'),
     new Platform(500, 320, 200, 50, 'pink'),
-    new Platform(300, 610, 200, 50, 'deepskyblue'),
+    new Platform(300, 500, 200, 50, 'deepskyblue'),
     new Platform(100, 360, 200, 50, 'orange'),
 ]
 
