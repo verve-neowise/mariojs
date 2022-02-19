@@ -1,7 +1,9 @@
 import Player from "./player.js"
 import Platform from "./platform.js"
 import { Options } from "./options.js"
-import Object from './object.js'
+
+import occurence from "./functions/collision/occurence.js"
+import collisions from "./functions/collision/sideCollisions.js"
 
 const canvas = document.querySelector('#canvas') as HTMLCanvasElement
 const context = canvas.getContext('2d')!
@@ -36,8 +38,6 @@ const platforms = [
 
 function update() {
     
-    movePlatforms()
-
     canJump = false
     
     if (keys.left) {
@@ -72,15 +72,12 @@ function update() {
     requestAnimationFrame(update)
 }
 
-function movePlatforms() {
-}
-
 function moveLeft() {
 
     player.velocity.x = -5
 
     platforms.forEach(platform => {
-        if (isInsideYAxis(platform) && checkLeftCollision(platform)) {
+        if (occurence.yAxis(player, platform) && collisions.left(player, platform)) {
             player.velocity.x = 0
             player.x = platform.maxX
         }
@@ -91,7 +88,7 @@ function moveRight() {
     player.velocity.x = 5
 
     platforms.forEach(platform => {
-        if (isInsideYAxis(platform) && checkRightCollision(platform)) {
+        if (occurence.yAxis(player, platform) && collisions.right(player, platform)) {
             player.velocity.x = 0
             player.x = platform.x - player.width
         }
@@ -113,7 +110,7 @@ function moveUp() {
 
 function checkTopCollisionInPlatforms() {
     platforms.forEach(platform => {
-        if (isInsideXAxis(platform) && checkTopCollision(platform)) {
+        if (occurence.xAxis(player, platform) && collisions.top(player, platform)) {
             player.velocity.y = 0
             player.y = platform.maxY
             keys.up = false
@@ -134,7 +131,7 @@ function applyGravity() {
     else {
 
         platforms.forEach(platform => {
-            if (isInsideXAxis(platform) && checkBottomCollision(platform)) {
+            if (occurence.xAxis(player, platform) && collisions.bottom(player, platform)) {
                 player.velocity.y = 0
                 player.y = platform.y - player.height
                 canJump = true
@@ -145,30 +142,6 @@ function applyGravity() {
 
 function checkFloorCollision() {
     return player.maxY + player.velocity.y >= canvas.height 
-}
-
-function checkLeftCollision(target: Object): boolean {
-    return player.x + player.velocity.x < target.maxX && player.x > target.x
-}
-
-function checkRightCollision(target: Object): boolean {
-    return player.maxX + player.velocity.x > target.x && player.maxX < target.maxX
-}
-
-function checkTopCollision(target: Object): boolean {
-    return player.y + player.velocity.y < target.maxY && player.y > target.y 
-}
-
-function checkBottomCollision(target: Object) {
-    return player.maxY + player.velocity.y >= target.y && player.maxY < target.maxY
-}
-
-function isInsideYAxis(target: Object): boolean {
-    return player.y > target.y && player.maxY < target.maxY || player.maxY > target.y && player.y < target.maxY
-}
-
-function isInsideXAxis(target: Object): boolean {
-    return player.x > target.x && player.maxX < target.maxX || player.maxX > target.x && player.x < target.maxX
 }
 
 function keydown(code: string) {
@@ -190,7 +163,6 @@ function keychange(code: string, state: boolean) {
         keys.down = state
     }
 }
-
 
 function keypressed(code: string) {
 

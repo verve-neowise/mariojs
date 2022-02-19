@@ -1,18 +1,12 @@
-import Object from "./object.js";
+import Object from "./components/object.js";
 import loadImage from "./functions/loadImage.js";
 export default class Player extends Object {
     constructor(x, y) {
         super();
-        this.velocity = {
-            x: 0,
-            y: 0
-        };
         this.draw = (options) => {
             options.context.drawImage(this.image, this.x, this.y, this.width, this.height);
         };
-        this.update = () => {
-            // todo update logic 
-        };
+        this.update = (world) => { };
         this.updatePositions = () => {
             this.x += this.velocity.x;
             this.y += this.velocity.y;

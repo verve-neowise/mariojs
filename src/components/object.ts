@@ -11,6 +11,11 @@ export default class Object {
     width: number = 0
     height: number = 0
 
+    velocity = {
+        x: 0,
+        y: 0
+    }
+
     set x (value: number) {
         this._x = value
         this.maxX = value + this.width

@@ -1,4 +1,4 @@
-import Object from "./object.js";
+import Object from "./components/object.js";
 export default class Platform extends Object {
     constructor(x, y, width, height, color) {
         super();
@@ -6,7 +6,7 @@ export default class Platform extends Object {
             options.context.fillStyle = this.color;
             options.context.fillRect(this.x, this.y, this.width, this.height);
         };
-        this.update = () => { };
+        this.update = (world) => { };
         this.name = color;
         this.width = width;
         this.height = height;

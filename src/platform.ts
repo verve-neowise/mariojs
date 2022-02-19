@@ -1,5 +1,6 @@
-import Component from "./component.js";
-import Object from "./object.js";
+import Component from "./components/component.js";
+import { World } from "./components/world.js";
+import Object from "./components/object.js";
 import { Options } from "./options.js";
 
 export default class Platform extends Object implements Component {
@@ -24,5 +25,5 @@ export default class Platform extends Object implements Component {
         options.context.fillRect(this.x, this.y, this.width, this.height)
     }
 
-    update = () => { }
+    update = (world: World) => { }
 }
