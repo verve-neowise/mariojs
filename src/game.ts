@@ -3,7 +3,10 @@ import Platform from "./platform.js"
 import { Options } from "./options.js"
 
 import occurence from "./functions/occurence.js"
-import collisions from "./functions/collision/sideCollisions.js"
+import collisions from "./functions/collision.js"
+import { World } from "./components/world.js"
+import TexturedPlatform from "./platform.textured.js"
+import Brick from "./brick.js"
 
 const canvas = document.querySelector('#canvas') as HTMLCanvasElement
 const context = canvas.getContext('2d')!
@@ -29,12 +32,27 @@ requestAnimationFrame(update)
 
 const player = new Player(0, 0)
 
+// const platforms = [
+//     new Platform(100, 150, 300, 50, 'black'),
+//     new Platform(500, 320, 200, 50, 'pink'),
+//     new Platform(300, 500, 200, 50, 'deepskyblue'),
+//     new Platform(100, 360, 200, 50, 'orange'),
+// ]
+
 const platforms = [
-    new Platform(100, 150, 300, 50, 'black'),
-    new Platform(500, 320, 200, 50, 'pink'),
-    new Platform(300, 500, 200, 50, 'deepskyblue'),
-    new Platform(100, 360, 200, 50, 'orange'),
+    new TexturedPlatform(100, 150),
+    new TexturedPlatform(100 + 136, 150),
+    new TexturedPlatform(500, 320),
+    new TexturedPlatform(500 + 136, 320),
+    new TexturedPlatform(300, 500),
+    new TexturedPlatform(100, 360),
+    new Brick(0, 270),
+    new Brick(400, 300),
 ]
+
+for (let i = 0; i < 10; i++) {
+    platforms.push(new TexturedPlatform(136 * i, canvas.height - 50))
+}
 
 function update() {
     
@@ -63,9 +81,10 @@ function update() {
 
     player.updatePositions()
 
-    context.fillStyle = 'white'
+    context.fillStyle = 'skyblue'
     context.fillRect(0, 0, canvas.width, canvas.height)
 
+    player.update(undefined)
     player.draw(options)
     platforms.forEach(platform => platform.draw(options))
 

@@ -6,7 +6,10 @@ import { World } from "./components/world.js";
 
 export default class Player extends Object implements Component {
 
-    image: HTMLImageElement
+    left: HTMLImageElement
+    right: HTMLImageElement
+
+    private currentFrame: HTMLImageElement
 
 
     constructor(x: number, y: number) {
@@ -16,14 +19,23 @@ export default class Player extends Object implements Component {
         this.y = y
         this.width = 44
         this.height = 80
-        this.image = loadImage('/mario.png', this.width, this.height)
+        this.left = loadImage('/mario_left.png', this.width, this.height)
+        this.right = loadImage('/mario_right.png', this.width, this.height)
+        this.currentFrame = this.right
     }
 
     draw = (options: Options) => {
-        options.context.drawImage(this.image, this.x, this.y, this.width, this.height)
+        options.context.drawImage(this.currentFrame, this.x, this.y)
     }
     
-    update = (world: World) => { }
+    update = (world: World | null | undefined) => {
+        if (this.velocity.x > 0) {
+            this.currentFrame = this.right
+        }
+        if (this.velocity.x < 0) {
+            this.currentFrame = this.left
+        }
+    }
 
     updatePositions = () => {
         this.x += this.velocity.x

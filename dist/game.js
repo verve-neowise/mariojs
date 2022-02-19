@@ -1,7 +1,8 @@
 import Player from "./player.js";
-import Platform from "./platform.js";
-import occurence from "./functions/collision/occurence.js";
-import collisions from "./functions/collision/sideCollisions.js";
+import occurence from "./functions/occurence.js";
+import collisions from "./functions/collision.js";
+import TexturedPlatform from "./platform.textured.js";
+import Brick from "./brick.js";
 const canvas = document.querySelector('#canvas');
 const context = canvas.getContext('2d');
 document.onkeydown = (event) => keydown(event.code);
@@ -18,12 +19,25 @@ const options = {
 const keys = { left: false, right: false, up: false, down: false };
 requestAnimationFrame(update);
 const player = new Player(0, 0);
+// const platforms = [
+//     new Platform(100, 150, 300, 50, 'black'),
+//     new Platform(500, 320, 200, 50, 'pink'),
+//     new Platform(300, 500, 200, 50, 'deepskyblue'),
+//     new Platform(100, 360, 200, 50, 'orange'),
+// ]
 const platforms = [
-    new Platform(100, 150, 300, 50, 'black'),
-    new Platform(500, 320, 200, 50, 'pink'),
-    new Platform(300, 500, 200, 50, 'deepskyblue'),
-    new Platform(100, 360, 200, 50, 'orange'),
+    new TexturedPlatform(100, 150),
+    new TexturedPlatform(100 + 136, 150),
+    new TexturedPlatform(500, 320),
+    new TexturedPlatform(500 + 136, 320),
+    new TexturedPlatform(300, 500),
+    new TexturedPlatform(100, 360),
+    new Brick(0, 270),
+    new Brick(400, 300),
 ];
+for (let i = 0; i < 10; i++) {
+    platforms.push(new TexturedPlatform(136 * i, canvas.height - 50));
+}
 function update() {
     canJump = false;
     if (keys.left) {
@@ -46,8 +60,9 @@ function update() {
         applyGravity();
     }
     player.updatePositions();
-    context.fillStyle = 'white';
+    context.fillStyle = 'skyblue';
     context.fillRect(0, 0, canvas.width, canvas.height);
+    player.update(undefined);
     player.draw(options);
     platforms.forEach(platform => platform.draw(options));
     requestAnimationFrame(update);
